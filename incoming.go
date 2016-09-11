@@ -88,12 +88,12 @@ func (a IncomingAttachment) Validate() error {
 }
 
 type IncomingAttachmentImage struct {
-	Url string `json:"url"`
+	URL string `json:"url"`
 }
 
 // Validate fields.
 func (i IncomingAttachmentImage) Validate() error {
-	if i.Url == "" {
+	if i.URL == "" {
 		return fmt.Errorf("`url` is required for incoming image")
 	}
 

@@ -45,7 +45,7 @@ func ExampleIncoming() {
 			{
 				Text: "愿原力与你同在",
 				Images: []IncomingAttachmentImage{
-					{Url: "http://img3.douban.com/icon/ul15067564-30.jpg"},
+					{URL: "http://img3.douban.com/icon/ul15067564-30.jpg"},
 				},
 			},
 		},
