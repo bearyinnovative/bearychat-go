@@ -1,14 +1,3 @@
-// Incoming message builder.
-//
-//      m := Incoming{
-//              Text: "Hello, **BearyChat**",
-//              Markdown: true,
-//              Notification: "Hello, BearyChat in Notification",
-//      }
-//      output, _ := m.Build()
-//      http.Post("YOUR INCOMING HOOK URI HERE", "application/json", output)
-//
-// For full documentation, visit https://bearychat.com/integrations/incoming .
 package bearychat
 
 import (
@@ -20,6 +9,17 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Incoming message builder.
+//
+//      m := Incoming{
+//              Text: "Hello, **BearyChat**",
+//              Markdown: true,
+//              Notification: "Hello, BearyChat in Notification",
+//      }
+//      output, _ := m.Build()
+//      http.Post("YOUR INCOMING HOOK URI HERE", "application/json", output)
+//
+// For full documentation, visit https://bearychat.com/integrations/incoming .
 type Incoming struct {
 	Text         string               `json:"text"`
 	Notification string               `json:"notification",omitempty`
