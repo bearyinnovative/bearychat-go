@@ -68,7 +68,7 @@ func TestIncomingWebhookClient_Send_WithoutHTTPClient(t *testing.T) {
 	}
 }
 
-func ExampleIncomingWebhookClient() {
+func ExampleNewIncomingWebhookClient() {
 	m := Incoming{Text: "Hello, BearyChat"}
 	payload, _ := m.Build()
 	resp, _ := NewIncomingWebhookClient("YOUR WEBHOOK URL").Send(payload)
