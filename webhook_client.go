@@ -40,7 +40,7 @@ type webhookClient struct {
 // Creates a new incoming webhook client.
 //
 // For full documentation, visit https://bearychat.com/integrations/incoming .
-func NewIncomingWebhookClient(webhook string) WebhookClient {
+func NewIncomingWebhookClient(webhook string) *webhookClient {
 	return &webhookClient{
 		httpClient: http.DefaultClient,
 
