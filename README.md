@@ -8,6 +8,22 @@
 
 [bearychat]: https://bearychat.com
 
+## API
+
+### Incoming Webhook
+
+- status: ready
+
+
+### RTM API
+
+- status: in progress
+
+
+### RTM client
+
+- status: in progress
+
 ## LICENSE
 
 MIT
