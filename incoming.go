@@ -22,7 +22,7 @@ import (
 // For full documentation, visit https://bearychat.com/integrations/incoming .
 type Incoming struct {
 	Text         string               `json:"text"`
-	Notification string               `json:"notification",omitempty`
+	Notification string               `json:"notification,omitempty"`
 	Markdown     bool                 `json:"markdown,omitempty"`
 	Channel      string               `json:"channel,omitempty"`
 	User         string               `json:"user,omitempty"`
@@ -62,10 +62,10 @@ func (m Incoming) Validate() error {
 }
 
 type IncomingAttachment struct {
-	Title  string                    `json:"title",omitempty`
-	Text   string                    `json:"text",omitempty`
-	Color  string                    `json:"color",omitempty`
-	Images []IncomingAttachmentImage `json:"images",omitempty`
+	Title  string                    `json:"title,omitempty"`
+	Text   string                    `json:"text,omitempty"`
+	Color  string                    `json:"color,omitempty"`
+	Images []IncomingAttachmentImage `json:"images,omitempty"`
 }
 
 // Validate fields.

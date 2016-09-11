@@ -8,9 +8,9 @@ import (
 )
 
 type WebhookResponse struct {
-	StatusCode int
+	StatusCode int              `json:"-"`
 	Code       int              `json:"code"`
-	Error      string           `json:"error",omitempty`
+	Error      string           `json:"error,omitempty"`
 	Result     *json.RawMessage `json:"result"`
 }
 
