@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// WebhookResponse represents a response.
 type WebhookResponse struct {
 	StatusCode int              `json:"-"`
 	Code       int              `json:"code"`
@@ -18,6 +19,7 @@ func (w WebhookResponse) IsOk() bool {
 	return w.Code == 0
 }
 
+// WebhookClient represents any webhook client can send message to BearyChat.
 type WebhookClient interface {
 	// Set webhook webhook.
 	SetWebhook(webhook string) WebhookClient
@@ -35,7 +37,10 @@ type webhookClient struct {
 	Webhook string
 }
 
-func NewIncomingWebhookClient(webhook string) *webhookClient {
+// Creates a new incoming webhook client.
+//
+// For full documentation, visit https://bearychat.com/integrations/incoming .
+func NewIncomingWebhookClient(webhook string) WebhookClient {
 	return &webhookClient{
 		httpClient: http.DefaultClient,
 

@@ -61,6 +61,7 @@ func (m Incoming) Validate() error {
 	return nil
 }
 
+// IncomingAttachment contains incoming attachment fields.
 type IncomingAttachment struct {
 	Title  string                    `json:"title,omitempty"`
 	Text   string                    `json:"text,omitempty"`
@@ -87,6 +88,7 @@ func (a IncomingAttachment) Validate() error {
 	return nil
 }
 
+// IncomingAttachmentImage contains attachment image fields.
 type IncomingAttachmentImage struct {
 	URL string `json:"url"`
 }
