@@ -8,6 +8,12 @@
 
 [bearychat]: https://bearychat.com
 
+## Usage
+
+```
+go get github.com/bcho/bearychat.go
+```
+
 ## API
 
 ### Incoming Webhook
