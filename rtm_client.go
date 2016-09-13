@@ -22,13 +22,22 @@ type RTMClient struct {
 	// rtm api base, defaults to `https://rtm.bearychat.com`
 	APIBase string
 
+	// services
+	CurrentTeam *RTMCurrentTeamService
+	User        *RTMUserService
+	Channel     *RTMChannelService
+
 	httpClient *http.Client
 }
 
 type rtmOptSetter func(*RTMClient) error
 
 // enabled services
-var services = []rtmOptSetter{}
+var services = []rtmOptSetter{
+	newRTMCurrentTeamService,
+	newRTMUserService,
+	newRTMChannelService,
+}
 
 // NewRTMClient creates a rtm client.
 //

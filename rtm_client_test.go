@@ -22,6 +22,13 @@ func TestNewRTMClient(t *testing.T) {
 	if c.APIBase != DEFAULT_RTM_API_BASE {
 		t.Errorf("should use default rtm api base: %s", c.APIBase)
 	}
+
+	if c.CurrentTeam == nil {
+		t.Errorf("should create current team service")
+	}
+	if c.User == nil {
+		t.Errorf("should create user service")
+	}
 }
 
 func TestNewRTMClient_error(t *testing.T) {
