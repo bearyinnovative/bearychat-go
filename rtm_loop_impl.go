@@ -10,10 +10,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-var (
-	rtmMessagePing = RTMMessage{"type": RTMMessageTypePing}
-)
-
 type rtmLoop struct {
 	wsHost string
 	conn   *websocket.Conn
@@ -89,7 +85,7 @@ func (l *rtmLoop) State() RTMLoopState {
 }
 
 func (l *rtmLoop) Ping() error {
-	return l.Send(rtmMessagePing)
+	return l.Send(RTMMessage{"type": RTMMessageTypePing})
 }
 
 func (l *rtmLoop) Keepalive(interval *time.Ticker) error {
