@@ -5,3 +5,6 @@ go:
     - 1.7
     - 1.6
     - 1.5
+
+notifications:
+  webhooks: https://hook.bearychat.com/=bw9bk/travis/99011000053f89bfdc98f8a3e08c4167
