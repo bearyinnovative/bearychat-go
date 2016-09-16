@@ -147,6 +147,17 @@ func (c RTMClient) Post(resource string, in, result interface{}) (*http.Response
 	return c.Do(resource, "POST", in, result)
 }
 
+// Start performs rtm.start
+func (c RTMClient) Start() (*User, string, error) {
+	userAndWSHost := new(struct {
+		User   *User  `json:"user"`
+		WSHost string `json:"ws_host"`
+	})
+	_, err := c.Post("start", nil, userAndWSHost)
+
+	return userAndWSHost.User, userAndWSHost.WSHost, err
+}
+
 // RTM api request response
 type RTMAPIResponse struct {
 	Code        int             `json:"code"`
