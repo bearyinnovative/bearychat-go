@@ -29,7 +29,7 @@ go get github.com/bcho/bearychat.go
 
 ### RTM client
 
-- status: in progress
+- status: ready, but testcases are in progress
 
 ## LICENSE
 
