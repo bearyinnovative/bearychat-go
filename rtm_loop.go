@@ -56,8 +56,8 @@ type RTMMessage map[string]interface{}
 
 func (m RTMMessage) Type() RTMMessageType {
 	if t, present := m["type"]; present {
-		if mtype, ok := t.(RTMMessageType); ok {
-			return mtype
+		if mtype, ok := t.(string); ok {
+			return RTMMessageType(mtype)
 		}
 	}
 
