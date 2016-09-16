@@ -13,6 +13,19 @@ type Team struct {
 	UpdatedAt   string `json:"updated"` // TODO parse date
 }
 
+const (
+	UserRoleOwner   = "owner"
+	UserRoleAdmin   = "admin"
+	UserRoleNormal  = "normal"
+	UserRoleVisitor = "visitor"
+)
+
+const (
+	UserTypeNormal    = "normal"
+	UserTypeAssistant = "assistant"
+	UserTypeHubot     = "hubot"
+)
+
 // User information
 type User struct {
 	Id         string `json:"id"`
@@ -23,6 +36,7 @@ type User struct {
 	Email      string `json:"email"`
 	AvatarUrl  string `json:"avatar_url"`
 	Role       string `json:"role"`
+	Type       string `json:"type"`
 	Conn       string `json:"conn"`
 	CreatedAt  string `json:"created"` // TODO parse date
 	UpdatedAt  string `json:"updated"` // TODO parse date
@@ -31,6 +45,11 @@ type User struct {
 // IsOnline tells user connection status.
 func (u User) IsOnline() bool {
 	return u.Conn == "connected"
+}
+
+// IsNormal tells if this user a normal user (owner, admin or normal)
+func (u User) IsNormal() bool {
+	return u.Type == UserTypeNormal && u.Role != UserRoleVisitor
 }
 
 // Channel information.
