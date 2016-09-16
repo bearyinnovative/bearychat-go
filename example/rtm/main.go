@@ -62,8 +62,7 @@ func main() {
 			}
 			return
 		case message := <-messageC:
-			if message.Type() != bearychat.RTMMessageTypeP2PMessage &&
-				message.Type() != bearychat.RTMMessageTypeChannelMessage {
+			if !message.IsChatMessage() {
 				continue
 			}
 			log.Printf(
@@ -72,26 +71,11 @@ func main() {
 				message["uid"],
 			)
 
-			if message["uid"] == user.Id {
+			if message.IsFromMe(*user) {
 				continue
 			}
 
-			reply := bearychat.RTMMessage{
-				"type":        message.Type(),
-				"text":        "Pardon?",
-				"refer_key":   message["key"],
-				"vchannel_id": message["vchannel_id"],
-			}
-
-			if message.Type() == bearychat.RTMMessageTypeChannelMessage {
-				reply["channel_id"] = message["channel_id"]
-			}
-
-			if message.Type() == bearychat.RTMMessageTypeP2PMessage {
-				reply["to_uid"] = message["uid"]
-			}
-
-			if err := rtmLoop.Send(reply); err != nil {
+			if err := rtmLoop.Send(message.Refer("Pardon?")); err != nil {
 				log.Fatal(err)
 			}
 		}
