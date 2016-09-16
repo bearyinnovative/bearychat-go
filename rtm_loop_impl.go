@@ -25,7 +25,7 @@ type rtmLoop struct {
 type rtmLoopSetter func(*rtmLoop) error
 
 // Set RTM message chan backlog.
-func RTMLoopBacklog(backlog int) rtmLoopSetter {
+func WithRTMLoopBacklog(backlog int) rtmLoopSetter {
 	return func(r *rtmLoop) error {
 		r.rtmCBacklog = backlog
 		return nil
