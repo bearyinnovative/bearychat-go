@@ -47,7 +47,7 @@ func NewRTMLoop(wsHost string, setters ...rtmLoopSetter) (*rtmLoop, error) {
 		}
 	}
 
-	if l.rtmCBacklog < 0 {
+	if l.rtmCBacklog <= 0 {
 		l.rtmC = make(chan RTMMessage)
 	} else {
 		l.rtmC = make(chan RTMMessage, l.rtmCBacklog)
