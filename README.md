@@ -31,6 +31,11 @@ go get github.com/bcho/bearychat.go
 
 - status: ready, but testcases are in progress
 
+## Examples
+
+- [RTM](example/rtm/main.go)
+- [Chaos Monkey](exmaple/chaosmonkey/main.go)
+
 ## LICENSE
 
 MIT
