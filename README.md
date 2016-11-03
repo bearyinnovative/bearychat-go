@@ -34,7 +34,7 @@ go get github.com/bcho/bearychat.go
 ## Examples
 
 - [RTM](example/rtm/main.go)
-- [Chaos Monkey](exmaple/chaosmonkey/main.go)
+- [Chaos Monkey](example/chaosmonkey/main.go)
 
 ## LICENSE
 
