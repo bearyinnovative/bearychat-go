@@ -158,6 +158,13 @@ func (c RTMClient) Start() (*User, string, error) {
 	return userAndWSHost.User, userAndWSHost.WSHost, err
 }
 
+// Incoming performs rtm.message
+func (c RTMClient) Incoming(m RTMIncoming) error {
+	_, err := c.Post("message", m, nil)
+
+	return err
+}
+
 // RTM api request response
 type RTMAPIResponse struct {
 	Code        int             `json:"code"`
@@ -180,4 +187,12 @@ func addTokenToResourceUri(resource, token string) (string, error) {
 	uri.RawQuery = q.Encode()
 
 	return uri.String(), nil
+}
+
+// RTMIncoming represents message sent vai `rtm.message` api
+type RTMIncoming struct {
+	Text        string               `json:"text"`
+	VChannelId  string               `json:"vchannel"`
+	Markdown    bool                 `json:"markdown,omitempty"`
+	Attachments []IncomingAttachment `json:"attachments,omitempty"`
 }
