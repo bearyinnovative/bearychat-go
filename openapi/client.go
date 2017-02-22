@@ -31,6 +31,7 @@ type Client struct {
 	// Shared services holder to reduce real service allocating.
 	base service
 
+	Meta *MetaService
 	Team *TeamService
 }
 
@@ -75,6 +76,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	}
 
 	c.base.client = c
+	c.Meta = (*MetaService)(&c.base)
 	c.Team = (*TeamService)(&c.base)
 
 	return c
