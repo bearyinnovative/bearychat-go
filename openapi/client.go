@@ -30,6 +30,8 @@ type Client struct {
 
 	// Shared services holder to reduce real service allocating.
 	base service
+
+	Team *TeamService
 }
 
 type service struct {
