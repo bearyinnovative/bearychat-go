@@ -16,6 +16,15 @@
 			"revision": "17b591df37844cde689f4d5813e5cea0927d8dd2",
 			"branch": "master",
 			"notests": true
+		},
+		{
+			"importpath": "golang.org/x/net/context",
+			"repository": "https://go.googlesource.com/net",
+			"vcs": "git",
+			"revision": "6b27048ae5e6ad1ef927e72e437531493de612fe",
+			"branch": "master",
+			"path": "/context",
+			"notests": true
 		}
 	]
 }
