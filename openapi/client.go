@@ -1,8 +1,16 @@
 package openapi
 
 import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
+	"time"
 )
 
 var defaultBaseURL = "https://api.bearychat.com/v1/"
@@ -65,6 +73,132 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	}
 
 	c.base.client = c
+	c.Team = (*TeamService)(&c.base)
 
 	return c
+}
+
+// newRequest creates an API request. API method should specified without a leading slash.
+// If specified, the value pointed to body is JSON encoded and included as the request body.
+func (c *Client) newRequest(requestMethod, apiMethod string, body interface{}) (*http.Request, error) {
+	m, err := url.Parse(apiMethod)
+	if err != nil {
+		return nil, err
+	}
+
+	u := c.BaseURL.ResolveReference(m)
+	q := u.Query()
+	q.Set("token", c.Token)
+	u.RawQuery = q.Encode()
+
+	var buf io.ReadWriter
+	if body != nil {
+		buf = &bytes.Buffer{}
+		err := json.NewEncoder(buf).Encode(body)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequest(requestMethod, u.String(), buf)
+	if err != nil {
+		return nil, err
+	}
+
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
+	return req, nil
+}
+
+// do sends an API request and returns the API response. The API response is JSON decoded and
+// stored in the value pointed to v. If v implements the io.Writer interface, the raw response body
+// will be written to v, without attempting to first decode it.
+//
+// The provided ctx must be non-nil. If it is canceled or times out, ctx.Err() will be returned.
+func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
+	req = req.WithContext(ctx)
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		// try to use context's error
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+		}
+
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	err = CheckResponse(resp)
+	if err != nil {
+		return resp, err
+	}
+
+	if v != nil {
+		if w, ok := v.(io.Writer); ok {
+			io.Copy(w, resp.Body)
+		} else {
+			err = json.NewDecoder(resp.Body).Decode(v)
+		}
+	}
+
+	return resp, err
+}
+
+// ErrorResponse represents errors caused by an API request.
+type ErrorResponse struct {
+	// HTTP response that caused this error
+	Response    *http.Response
+	ErrorCode   int    `json:"code"`
+	ErrorReason string `json:"error"`
+}
+
+func (r ErrorResponse) Error() string {
+	return fmt.Sprintf(
+		"%v %v: %d %d %s",
+		r.Response.Request.Method,
+		r.Response.Request.URL,
+		r.Response.StatusCode,
+		r.ErrorCode,
+		r.ErrorReason,
+	)
+}
+
+// CheckResponse checks the API response for errors, and returns them if present.
+func CheckResponse(r *http.Response) error {
+	if c := r.StatusCode; 200 <= c && c <= 299 {
+		return nil
+	}
+
+	errResponse := &ErrorResponse{Response: r}
+	data, err := ioutil.ReadAll(r.Body)
+	if err == nil && data != nil {
+		json.Unmarshal(data, errResponse)
+	}
+
+	// TODO(hbc): handle ratelimit error
+
+	return errResponse
+}
+
+const timeLayout = "2006-01-02T15:04:05-0700"
+
+// Time with custom JSON format.
+type Time struct {
+	time.Time
+}
+
+func (t Time) UnmarshalJSON(b []byte) (err error) {
+	s := strings.Trim(string(b), "\"")
+	t.Time, err = time.Parse(timeLayout, s)
+	return
+}
+
+func (t Time) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("\"%s\"", t.Time.Format(timeLayout))), nil
 }
