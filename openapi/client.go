@@ -34,6 +34,7 @@ type Client struct {
 
 	Meta *MetaService
 	Team *TeamService
+	User *UserService
 }
 
 type service struct {
@@ -79,6 +80,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	c.base.client = c
 	c.Meta = (*MetaService)(&c.base)
 	c.Team = (*TeamService)(&c.base)
+	c.User = (*UserService)(&c.base)
 
 	return c
 }
