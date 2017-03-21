@@ -58,3 +58,23 @@ func (c *ChannelService) List(ctx context.Context) ([]*Channel, *http.Response, 
 	}
 	return channels, resp, nil
 }
+
+type ChannelCreateOptions struct {
+	Name    string  `json:"name"`
+	Topic   *string `json:"topic,omitempty"`
+	Private *bool   `json:"private,omitempty"`
+}
+
+func (c *ChannelService) Create(ctx context.Context, opt *ChannelCreateOptions) (*Channel, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.create", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var channel Channel
+	resp, err := c.client.do(ctx, req, &channel)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &channel, resp, nil
+}
