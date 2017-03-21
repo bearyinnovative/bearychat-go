@@ -65,8 +65,27 @@ type ChannelCreateOptions struct {
 	Private *bool   `json:"private,omitempty"`
 }
 
+// Create implements `POST /channel.create`
 func (c *ChannelService) Create(ctx context.Context, opt *ChannelCreateOptions) (*Channel, *http.Response, error) {
 	req, err := c.client.newRequest("POST", "channel.create", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var channel Channel
+	resp, err := c.client.do(ctx, req, &channel)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &channel, resp, nil
+}
+
+type ChannelArchiveOptions struct {
+	ChannelID string `json:"channel_id"`
+}
+
+func (c *ChannelService) Archive(ctx context.Context, opt *ChannelArchiveOptions) (*Channel, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.archive", opt)
 	if err != nil {
 		return nil, nil, err
 	}
