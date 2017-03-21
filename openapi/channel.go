@@ -43,3 +43,18 @@ func (c *ChannelService) Info(ctx context.Context, opt *ChannelInfoOptions) (*Ch
 	}
 	return &channel, resp, nil
 }
+
+// List implements `GET /channel.list`
+func (c *ChannelService) List(ctx context.Context) ([]*Channel, *http.Response, error) {
+	req, err := c.client.newRequest("GET", "channel.list", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var channels []*Channel
+	resp, err := c.client.do(ctx, req, &channels)
+	if err != nil {
+		return nil, resp, err
+	}
+	return channels, resp, nil
+}
