@@ -84,8 +84,28 @@ type ChannelArchiveOptions struct {
 	ChannelID string `json:"channel_id"`
 }
 
+// Archive implements `POST /channel.archive`
 func (c *ChannelService) Archive(ctx context.Context, opt *ChannelArchiveOptions) (*Channel, *http.Response, error) {
 	req, err := c.client.newRequest("POST", "channel.archive", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var channel Channel
+	resp, err := c.client.do(ctx, req, &channel)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &channel, resp, nil
+}
+
+type ChannelUnarchiveOptions struct {
+	ChannelID string `json:"channel_id"`
+}
+
+// Unarchive implements `POST /channel.unarchive`
+func (c *ChannelService) Unarchive(ctx context.Context, opt *ChannelUnarchiveOptions) (*Channel, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.unarchive", opt)
 	if err != nil {
 		return nil, nil, err
 	}

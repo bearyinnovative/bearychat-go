@@ -215,3 +215,7 @@ func (t Time) UnmarshalJSON(b []byte) (err error) {
 func (t Time) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("\"%s\"", t.Time.Format(timeLayout))), nil
 }
+
+type ResponseOK struct {
+	Code *int `json:"code,omitempty"`
+}
