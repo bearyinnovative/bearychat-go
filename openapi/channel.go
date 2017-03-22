@@ -140,9 +140,28 @@ type ChannelJoinOptions struct {
 	ChannelID string `json:"channel_id"`
 }
 
-// Leave implements `POST /channel.join`
+// Join implements `POST /channel.join`
 func (c *ChannelService) Join(ctx context.Context, opt *ChannelJoinOptions) (*ResponseNoContent, *http.Response, error) {
 	req, err := c.client.newRequest("POST", "channel.join", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := c.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
+
+type ChannelInviteOptions struct {
+	ChannelID    string `json:"channel_id"`
+	InviteUserID string `json:"invite_uid"`
+}
+
+// Invite implements `POST /channel.invite`
+func (c *ChannelService) Invite(ctx context.Context, opt *ChannelInviteOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.invite", opt)
 	if err != nil {
 		return nil, nil, err
 	}
