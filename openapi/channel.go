@@ -135,3 +135,21 @@ func (c *ChannelService) Leave(ctx context.Context, opt *ChannelLeaveOptions) (*
 	}
 	return &ResponseNoContent{}, resp, nil
 }
+
+type ChannelJoinOptions struct {
+	ChannelID string `json:"channel_id"`
+}
+
+// Leave implements `POST /channel.join`
+func (c *ChannelService) Join(ctx context.Context, opt *ChannelJoinOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.join", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := c.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
