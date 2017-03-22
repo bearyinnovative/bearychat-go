@@ -172,3 +172,22 @@ func (c *ChannelService) Invite(ctx context.Context, opt *ChannelInviteOptions) 
 	}
 	return &ResponseNoContent{}, resp, nil
 }
+
+type ChannelKickOptions struct {
+	ChannelID  string `json:"channel_id"`
+	KickUserID string `json:"kick_uid"`
+}
+
+// Kick implements `POST /channel.kick`
+func (c *ChannelService) Kick(ctx context.Context, opt *ChannelKickOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.kickout", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := c.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
