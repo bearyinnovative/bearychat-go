@@ -219,3 +219,5 @@ func (t Time) MarshalJSON() ([]byte, error) {
 type ResponseOK struct {
 	Code *int `json:"code,omitempty"`
 }
+
+type ResponseNoContent struct{}
