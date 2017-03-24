@@ -142,17 +142,18 @@ type ChannelJoinOptions struct {
 }
 
 // Join implements `POST /channel.join`
-func (c *ChannelService) Join(ctx context.Context, opt *ChannelJoinOptions) (*ResponseNoContent, *http.Response, error) {
+func (c *ChannelService) Join(ctx context.Context, opt *ChannelJoinOptions) (*Channel, *http.Response, error) {
 	req, err := c.client.newRequest("POST", "channel.join", opt)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	resp, err := c.client.do(ctx, req, nil)
+	var channel Channel
+	resp, err := c.client.do(ctx, req, &channel)
 	if err != nil {
 		return nil, resp, err
 	}
-	return &ResponseNoContent{}, resp, nil
+	return &channel, resp, nil
 }
 
 type ChannelInviteOptions struct {
