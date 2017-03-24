@@ -36,6 +36,7 @@ type Client struct {
 	Team    *TeamService
 	User    *UserService
 	Channel *ChannelService
+	P2P     *P2PService
 	Emoji   *EmojiService
 	Sticker *StickerService
 }
@@ -85,6 +86,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	c.Team = (*TeamService)(&c.base)
 	c.User = (*UserService)(&c.base)
 	c.Channel = (*ChannelService)(&c.base)
+	c.P2P = (*P2PService)(&c.base)
 	c.Emoji = (*EmojiService)(&c.base)
 	c.Sticker = (*StickerService)(&c.base)
 
