@@ -11,6 +11,8 @@
 
 ## Usage
 
+go 1.7+
+
 ```
 go get github.com/bcho/bearychat.go
 ```
