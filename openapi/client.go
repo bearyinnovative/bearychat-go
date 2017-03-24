@@ -32,14 +32,15 @@ type Client struct {
 	// Shared services holder to reduce real service allocating.
 	base service
 
-	Meta    *MetaService
-	Team    *TeamService
-	User    *UserService
-	Channel *ChannelService
-	P2P     *P2PService
-	Emoji   *EmojiService
-	Sticker *StickerService
-	RTM     *RTMService
+	Meta           *MetaService
+	Team           *TeamService
+	User           *UserService
+	Channel        *ChannelService
+	SessionChannel *SessionChannelService
+	P2P            *P2PService
+	Emoji          *EmojiService
+	Sticker        *StickerService
+	RTM            *RTMService
 }
 
 type service struct {
@@ -87,6 +88,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	c.Team = (*TeamService)(&c.base)
 	c.User = (*UserService)(&c.base)
 	c.Channel = (*ChannelService)(&c.base)
+	c.SessionChannel = (*SessionChannelService)(&c.base)
 	c.P2P = (*P2PService)(&c.base)
 	c.Emoji = (*EmojiService)(&c.base)
 	c.Sticker = (*StickerService)(&c.base)
