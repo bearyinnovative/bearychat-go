@@ -39,6 +39,7 @@ type Client struct {
 	P2P     *P2PService
 	Emoji   *EmojiService
 	Sticker *StickerService
+	RTM     *RTMService
 }
 
 type service struct {
@@ -89,6 +90,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	c.P2P = (*P2PService)(&c.base)
 	c.Emoji = (*EmojiService)(&c.base)
 	c.Sticker = (*StickerService)(&c.base)
+	c.RTM = (*RTMService)(&c.base)
 
 	return c
 }
