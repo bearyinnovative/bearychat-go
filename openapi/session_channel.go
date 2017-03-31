@@ -151,3 +151,22 @@ func (s *SessionChannelService) Invite(ctx context.Context, opt *SessionChannelI
 	}
 	return &ResponseNoContent{}, resp, nil
 }
+
+type SessionChannelKickOptions struct {
+	ChannelID  string `json:"session_channel_id"`
+	KickUserID string `json:"kick_uid"`
+}
+
+// Kick implements `POST /session_channel.kick`
+func (s *SessionChannelService) Kick(ctx context.Context, opt *SessionChannelKickOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := s.client.newRequest("POST", "session_channel.kick", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := s.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
