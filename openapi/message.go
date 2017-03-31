@@ -65,3 +65,27 @@ func (m *MessageService) Info(ctx context.Context, opt *MessageInfoOptions) (*Me
 	}
 	return &message, resp, nil
 }
+
+type MessageCreateOptions struct {
+	VChannelID  string              `json:"vchannel_id"`
+	Text        string              `json:"text"`
+	Attachments []MessageAttachment `json:"attachments"`
+}
+
+// Create implements `POST /message.create`
+func (m *MessageService) Create(ctx context.Context, opt *MessageCreateOptions) (*Message, *http.Response, error) {
+	if opt.Attachments == nil {
+		opt.Attachments = []MessageAttachment{}
+	}
+	req, err := m.client.newRequest("POST", "message.create", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var message Message
+	resp, err := m.client.do(ctx, req, &message)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &message, resp, nil
+}
