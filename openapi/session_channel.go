@@ -54,3 +54,23 @@ func (s *SessionChannelService) List(ctx context.Context) ([]*SessionChannel, *h
 	}
 	return channels, resp, nil
 }
+
+type SessionChannelCreateOptions struct {
+	Name          *string  `json:"name,omitempty"`
+	MemberUserIDs []string `json:"member_uids"`
+}
+
+// Create implements `POST /session_channel.create`
+func (s *SessionChannelService) Create(ctx context.Context, opt *SessionChannelCreateOptions) (*SessionChannel, *http.Response, error) {
+	req, err := s.client.newRequest("POST", "session_channel.create", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var channel SessionChannel
+	resp, err := s.client.do(ctx, req, &channel)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &channel, resp, nil
+}
