@@ -76,7 +76,7 @@ func (s *SessionChannelService) Create(ctx context.Context, opt *SessionChannelC
 }
 
 type SessionChannelArchiveOptions struct {
-	ChannelID string `json:"channel_id"`
+	ChannelID string `json:"session_channel_id"`
 }
 
 // Archive implements `POST /session_channel.archive`
@@ -87,6 +87,27 @@ func (s *SessionChannelService) Archive(ctx context.Context, opt *SessionChannel
 	}
 
 	var channel SessionChannel
+	resp, err := s.client.do(ctx, req, &channel)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &channel, resp, nil
+}
+
+type SessionChannelConvertOptions struct {
+	ChannelID string `json:"session_channel_id"`
+	Name      string `json:"name"`
+	Private   *bool  `json:"private,omitempty"`
+}
+
+// ConvertToChannel implements `POST /session_channel.convert_to_channel`
+func (s *SessionChannelService) ConvertToChannel(ctx context.Context, opt *SessionChannelConvertOptions) (*Channel, *http.Response, error) {
+	req, err := s.client.newRequest("POST", "session_channel.convert_to_channel", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var channel Channel
 	resp, err := s.client.do(ctx, req, &channel)
 	if err != nil {
 		return nil, resp, err
