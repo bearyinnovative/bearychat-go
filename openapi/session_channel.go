@@ -132,3 +132,22 @@ func (s *SessionChannelService) Leave(ctx context.Context, opt *SessionChannelLe
 	}
 	return &ResponseNoContent{}, resp, nil
 }
+
+type SessionChannelInviteOptions struct {
+	ChannelID    string `json:"session_channel_id"`
+	InviteUserID string `json:"invite_uid"`
+}
+
+// Invite implements `POST /session_channel.invite`
+func (s *SessionChannelService) Invite(ctx context.Context, opt *SessionChannelInviteOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := s.client.newRequest("POST", "session_channel.invite", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := s.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
