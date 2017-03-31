@@ -47,7 +47,7 @@ type MessageService service
 
 type MessageInfoOptions struct {
 	VChannelID string
-	Key        string
+	Key        MessageKey
 }
 
 // Info implements `GET /message.info`
@@ -88,4 +88,23 @@ func (m *MessageService) Create(ctx context.Context, opt *MessageCreateOptions) 
 		return nil, resp, err
 	}
 	return &message, resp, nil
+}
+
+type MessageDeleteOptions struct {
+	VChannelID string     `json:"vchannel_id"`
+	Key        MessageKey `json:"message_key"`
+}
+
+// Delete implements `POST /message.delete`
+func (m *MessageService) Delete(ctx context.Context, opt *MessageDeleteOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := m.client.newRequest("POST", "message.delete", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := m.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
 }
