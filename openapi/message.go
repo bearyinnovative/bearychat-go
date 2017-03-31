@@ -108,3 +108,24 @@ func (m *MessageService) Delete(ctx context.Context, opt *MessageDeleteOptions) 
 	}
 	return &ResponseNoContent{}, resp, nil
 }
+
+type MessageUpdateTextOptions struct {
+	VChannelID string     `json:"vchannel_id"`
+	Key        MessageKey `json:"message_key"`
+	Text       string     `json:"text"`
+}
+
+//UpdateText implements `POST /message.update_text`
+func (m *MessageService) UpdateText(ctx context.Context, opt *MessageUpdateTextOptions) (*Message, *http.Response, error) {
+	req, err := m.client.newRequest("PATCH", "message.update_text", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var message Message
+	resp, err := m.client.do(ctx, req, &message)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &message, resp, nil
+}
