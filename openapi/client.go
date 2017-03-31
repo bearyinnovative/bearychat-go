@@ -37,6 +37,7 @@ type Client struct {
 	User           *UserService
 	Channel        *ChannelService
 	SessionChannel *SessionChannelService
+	Message        *MessageService
 	P2P            *P2PService
 	Emoji          *EmojiService
 	Sticker        *StickerService
@@ -89,6 +90,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	c.User = (*UserService)(&c.base)
 	c.Channel = (*ChannelService)(&c.base)
 	c.SessionChannel = (*SessionChannelService)(&c.base)
+	c.Message = (*MessageService)(&c.base)
 	c.P2P = (*P2PService)(&c.base)
 	c.Emoji = (*EmojiService)(&c.base)
 	c.Sticker = (*StickerService)(&c.base)
