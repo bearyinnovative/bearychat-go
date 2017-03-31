@@ -114,3 +114,21 @@ func (s *SessionChannelService) ConvertToChannel(ctx context.Context, opt *Sessi
 	}
 	return &channel, resp, nil
 }
+
+type SessionChannelLeaveOptions struct {
+	ChannelID string `json:"session_channel_id"`
+}
+
+// Leave implements `POST /session_channel.leave`
+func (s *SessionChannelService) Leave(ctx context.Context, opt *SessionChannelLeaveOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := s.client.newRequest("POST", "session_channel.leave", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := s.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
