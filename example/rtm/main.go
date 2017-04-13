@@ -6,58 +6,36 @@ package main
 import (
 	"flag"
 	"log"
-	"time"
 
-	"github.com/bcho/bearychat.go"
-)
-
-const (
-	RTM_API_BASE = "https://rtm.bearychat.com"
+	bearychat "github.com/bearyinnovative/bearychat-go"
 )
 
 var rtmToken string
 
+func init() {
+	flag.StringVar(&rtmToken, "rtmToken", "", "BearyChat RTM token")
+}
+
 func main() {
 	flag.Parse()
 
-	rtmClient, err := bearychat.NewRTMClient(
-		rtmToken,
-		bearychat.WithRTMAPIBase(RTM_API_BASE),
-	)
+	context, err := bearychat.NewRTMContext(rtmToken)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
-	user, wsHost, err := rtmClient.Start()
+	err, messageC, errC := context.Run()
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	log.Printf("rtm connected as %s", user.Name)
-
-	rtmLoop, err := bearychat.NewRTMLoop(wsHost)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if err := rtmLoop.Start(); err != nil {
-		log.Fatal(err)
-	}
-	defer rtmLoop.Stop()
-
-	go rtmLoop.Keepalive(time.NewTicker(2 * time.Second))
-
-	errC := rtmLoop.ErrC()
-	messageC, err := rtmLoop.ReadC()
-	if err != nil {
-		log.Fatal(err)
+		return
 	}
 
 	for {
 		select {
 		case err := <-errC:
 			log.Printf("rtm loop error: %+v", err)
-			if err := rtmLoop.Stop(); err != nil {
+			if err := context.Loop.Stop(); err != nil {
 				log.Fatal(err)
 			}
 			return
@@ -65,23 +43,24 @@ func main() {
 			if !message.IsChatMessage() {
 				continue
 			}
+
+			// from self
+			if message.IsFromUID(context.UID()) {
+				continue
+			}
+
 			log.Printf(
-				"rtm loop received: %s from %s",
+				"received: %s from %s",
 				message["text"],
 				message["uid"],
 			)
 
-			if message.IsFromMe(*user) {
-				continue
-			}
-
-			if err := rtmLoop.Send(message.Refer("Pardon?")); err != nil {
-				log.Fatal(err)
+			// only reply mentioned myself
+			if mentioned, content := message.ParseMentionUID(context.UID()); mentioned {
+				if err := context.Loop.Send(message.Refer(content)); err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	}
-}
-
-func init() {
-	flag.StringVar(&rtmToken, "rtmToken", "", "BearyChat RTM token")
 }
