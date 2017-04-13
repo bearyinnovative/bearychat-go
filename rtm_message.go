@@ -1,5 +1,7 @@
 package bearychat
 
+import "regexp"
+
 type RTMMessageType string
 
 const (
@@ -75,6 +77,48 @@ func (m RTMMessage) IsChatMessage() bool {
 	return false
 }
 
-func (m RTMMessage) IsFromMe(u User) bool {
-	return m["uid"] == u.Id
+func (m RTMMessage) IsFromUser(u User) bool {
+	return m.IsFromUID(u.Id)
+}
+
+func (m RTMMessage) IsFromUID(uid string) bool {
+	return m["uid"] == uid
+}
+
+func (m RTMMessage) Text() string {
+	if text, ok := m["text"].(string); ok {
+		return text
+	}
+
+	return ""
+}
+
+func (m RTMMessage) ParseMentionUser(u User) (bool, string) {
+	return m.ParseMentionUID(u.Id)
+}
+
+var mentionUserRegex = regexp.MustCompile("@<=(.*)=> ")
+
+func (m RTMMessage) ParseMentionUID(uid string) (bool, string) {
+	text := m.Text()
+
+	if m.IsP2P() {
+		return true, text
+	}
+
+	if text == "" {
+		return false, text
+	}
+
+	loc := mentionUserRegex.FindStringIndex(text)
+
+	if len(loc) != 2 {
+		return false, text
+	}
+
+	if text[loc[0]+3:loc[1]-3] == uid {
+		return true, text[loc[1]:]
+	}
+
+	return false, text
 }

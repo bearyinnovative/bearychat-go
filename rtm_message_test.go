@@ -1,6 +1,9 @@
 package bearychat
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestRTMMessage_Type(t *testing.T) {
 	cases := [][]RTMMessageType{
@@ -74,19 +77,25 @@ func TestRTMMessage_IsChatMessage(t *testing.T) {
 	}
 }
 
-func TestRTMMessage_IsFromMe(t *testing.T) {
+func TestRTMMessage_IsFrom(t *testing.T) {
 	uid := "1"
 	user := User{Id: uid}
 	var m RTMMessage
 
 	m = RTMMessage{"uid": uid}
-	if !m.IsFromMe(user) {
-		t.Errorf("expected from me: %+v", m)
+	if !m.IsFromUser(user) {
+		t.Errorf("expected from user: %+v", m)
+	}
+	if !m.IsFromUID(uid) {
+		t.Errorf("expected from uid: %+v", m)
 	}
 
 	m = RTMMessage{"uid": uid + "1"}
-	if m.IsFromMe(user) {
-		t.Errorf("unexpected from me: %+v", m)
+	if m.IsFromUser(user) {
+		t.Errorf("unexpected from user: %+v", m)
+	}
+	if m.IsFromUID(uid) {
+		t.Errorf("expected from uid: %+v", m)
 	}
 }
 
@@ -188,4 +197,60 @@ func TestRTMMessage_Reply_P2PMessage(t *testing.T) {
 	if reply["vchannel_id"] != m["vchannel_id"] {
 		t.Errorf("unexpected %s", reply["vchannel_id"])
 	}
+}
+
+func TestRTMMessage_ParseMention(t *testing.T) {
+	uid := "1"
+	text := "abc"
+	user := User{Id: uid}
+
+	m := RTMMessage{}
+	var mentioned bool
+	var content string
+
+	expect := func(expectMentioned bool, expectContent string) {
+		if mentioned != expectMentioned {
+			t.Errorf("expected mentioned: %v, got %v, m: %+v", expectMentioned, mentioned, m)
+		}
+		if content != expectContent {
+			t.Errorf("expected content: %v, got %v", expectContent, content)
+		}
+	}
+
+	m["text"] = text
+	m["type"] = RTMMessageTypeP2PMessage
+	mentioned, content = m.ParseMentionUser(user)
+	expect(true, text)
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(true, text)
+
+	m["type"] = RTMMessageTypeChannelMessage
+	mentioned, content = m.ParseMentionUser(user)
+	expect(false, text)
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(false, text)
+
+	m["text"] = fmt.Sprintf("@<=%s=> %s", uid, text)
+	mentioned, content = m.ParseMentionUser(user)
+	expect(true, text)
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(true, text)
+
+	m["text"] = fmt.Sprintf("123123123 12312 123@<=%s=> %s", uid, text)
+	mentioned, content = m.ParseMentionUser(user)
+	expect(true, text)
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(true, text)
+
+	m["text"] = fmt.Sprintf("@<=%s=>", uid)
+	mentioned, content = m.ParseMentionUser(user)
+	expect(false, m.Text())
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(false, m.Text())
+
+	m["text"] = fmt.Sprintf("@<=%s=> ", uid)
+	mentioned, content = m.ParseMentionUser(user)
+	expect(true, "")
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(true, "")
 }
