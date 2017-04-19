@@ -97,7 +97,7 @@ func (m RTMMessage) ParseMentionUser(u User) (bool, string) {
 	return m.ParseMentionUID(u.Id)
 }
 
-var mentionUserRegex = regexp.MustCompile("@<=(.*)=> ")
+var mentionUserRegex = regexp.MustCompile("@<=(=[A-Za-z0-9]+)=> ")
 
 func (m RTMMessage) ParseMentionUID(uid string) (bool, string) {
 	text := m.Text()
