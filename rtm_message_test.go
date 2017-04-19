@@ -200,7 +200,7 @@ func TestRTMMessage_Reply_P2PMessage(t *testing.T) {
 }
 
 func TestRTMMessage_ParseMention(t *testing.T) {
-	uid := "1"
+	uid := "=1"
 	text := "abc"
 	user := User{Id: uid}
 
@@ -210,10 +210,10 @@ func TestRTMMessage_ParseMention(t *testing.T) {
 
 	expect := func(expectMentioned bool, expectContent string) {
 		if mentioned != expectMentioned {
-			t.Errorf("expected mentioned: %v, got %v, m: %+v", expectMentioned, mentioned, m)
+			t.Errorf("expected mentioned: '%v', got '%v', m: %+v", expectMentioned, mentioned, m)
 		}
 		if content != expectContent {
-			t.Errorf("expected content: %v, got %v", expectContent, content)
+			t.Errorf("expected content: '%v', got '%v'", expectContent, content)
 		}
 	}
 
@@ -253,4 +253,10 @@ func TestRTMMessage_ParseMention(t *testing.T) {
 	expect(true, "")
 	mentioned, content = m.ParseMentionUID(uid)
 	expect(true, "")
+
+	m["text"] = fmt.Sprintf("@<=%s=> 你和 @<==bwOwr=> 谁聪明", uid)
+	mentioned, content = m.ParseMentionUser(user)
+	expect(true, "你和 @<==bwOwr=> 谁聪明")
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(true, "你和 @<==bwOwr=> 谁聪明")
 }
