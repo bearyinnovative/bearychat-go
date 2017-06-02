@@ -182,6 +182,20 @@ type ChannelKickOptions struct {
 
 // Kick implements `POST /channel.kick`
 func (c *ChannelService) Kick(ctx context.Context, opt *ChannelKickOptions) (*ResponseNoContent, *http.Response, error) {
+	req, err := c.client.newRequest("POST", "channel.kick", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := c.client.do(ctx, req, nil)
+	if err != nil {
+		return nil, resp, err
+	}
+	return &ResponseNoContent{}, resp, nil
+}
+
+// Kickout implements `POST /channel.kickout`
+func (c *ChannelService) Kickout(ctx context.Context, opt *ChannelKickOptions) (*ResponseNoContent, *http.Response, error) {
 	req, err := c.client.newRequest("POST", "channel.kickout", opt)
 	if err != nil {
 		return nil, nil, err
