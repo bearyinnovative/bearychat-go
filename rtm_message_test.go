@@ -259,4 +259,10 @@ func TestRTMMessage_ParseMention(t *testing.T) {
 	expect(true, "你和 @<==bwOwr=> 谁聪明")
 	mentioned, content = m.ParseMentionUID(uid)
 	expect(true, "你和 @<==bwOwr=> 谁聪明")
+
+	m["text"] = fmt.Sprintf("@<==bwOwr=> @<=%s=> hello", uid)
+	mentioned, content = m.ParseMentionUser(user)
+	expect(true, "hello")
+	mentioned, content = m.ParseMentionUID(uid)
+	expect(true, "hello")
 }
