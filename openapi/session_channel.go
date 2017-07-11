@@ -170,17 +170,3 @@ func (s *SessionChannelService) Kick(ctx context.Context, opt *SessionChannelKic
 	}
 	return &ResponseNoContent{}, resp, nil
 }
-
-// Kickout implements `POST /session_channel.kickout`
-func (s *SessionChannelService) Kick(ctx context.Context, opt *SessionChannelKickOptions) (*ResponseNoContent, *http.Response, error) {
-	req, err := s.client.newRequest("POST", "session_channel.kickout", opt)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	resp, err := s.client.do(ctx, req, nil)
-	if err != nil {
-		return nil, resp, err
-	}
-	return &ResponseNoContent{}, resp, nil
-}
