@@ -110,14 +110,18 @@ func (m RTMMessage) ParseMentionUID(uid string) (bool, string) {
 		return false, text
 	}
 
-	loc := mentionUserRegex.FindStringIndex(text)
+	locs := mentionUserRegex.FindAllStringSubmatchIndex(text, -1)
 
-	if len(loc) != 2 {
+	if len(locs) == 0 {
 		return false, text
 	}
 
-	if text[loc[0]+3:loc[1]-3] == uid {
-		return true, text[loc[1]:]
+	for _, loc := range locs {
+		// "@<==1=> xxx" -> [0 8 3 5]
+		// [3:5] "=1" [8:] "xxx"
+		if text[loc[2]:loc[3]] == uid {
+			return true, text[loc[1]:]
+		}
 	}
 
 	return false, text
