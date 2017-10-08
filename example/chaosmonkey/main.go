@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bcho/bearychat.go"
+	"github.com/bearyinnovative/bearychat-go"
 )
 
 type Config struct {
