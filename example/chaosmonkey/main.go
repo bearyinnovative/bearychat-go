@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bcho/bearychat.go"
+	"github.com/bearyinnovative/bearychat-go"
 )
 
 type Config struct {
@@ -89,7 +89,7 @@ func main() {
 			if !message.IsP2P() {
 				continue
 			}
-			if message.IsFromMe(*user) {
+			if message.IsFromUser(*user) {
 				continue
 			}
 			uid := message["uid"].(string)

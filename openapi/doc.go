@@ -4,7 +4,7 @@
 //
 // Usage:
 //
-//      import "github.com/bcho/bearychat.go/openapi"
+//      import "github.com/bearyinnovative/bearychat-go/openapi"
 //
 // API methods are bound to a API client. To construct a new client:
 //
