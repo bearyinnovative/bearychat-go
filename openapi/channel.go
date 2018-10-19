@@ -1,10 +1,9 @@
 package openapi
 
 import (
+	"context"
 	"fmt"
 	"net/http"
-
-	"golang.org/x/net/context"
 )
 
 type Channel struct {

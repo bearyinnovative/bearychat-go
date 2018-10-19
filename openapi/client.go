@@ -2,6 +2,7 @@ package openapi
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,8 +11,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 var defaultBaseURL = "https://api.bearychat.com/v1/"
@@ -42,6 +41,7 @@ type Client struct {
 	Emoji          *EmojiService
 	Sticker        *StickerService
 	RTM            *RTMService
+	MessagePin     *MessagePinService
 }
 
 type service struct {
@@ -95,6 +95,7 @@ func NewClient(token string, opts ...clientOpt) *Client {
 	c.Emoji = (*EmojiService)(&c.base)
 	c.Sticker = (*StickerService)(&c.base)
 	c.RTM = (*RTMService)(&c.base)
+	c.MessagePin = (*MessagePinService)(&c.base)
 
 	return c
 }
