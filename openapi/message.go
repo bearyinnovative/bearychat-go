@@ -44,6 +44,32 @@ type Repost struct {
 	Text       *string         `json:"text,omitempty"`
 }
 
+type File struct {
+	Inactive    *bool       `json:"inactive,omitempty"`
+	Description *string     `json:"description,omitempty"`
+	Category    *string     `json:"category,omitempty"`
+	Deleted     *bool       `json:"deleted,omitempty"`
+	StarID      *string     `json:"star_id,omitempty"`
+	Key         *MessageKey `json:"key,omitempty"`
+	Updated     *Time       `json:"updated,omitempty"`
+	UID         *string     `json:"uid,omitempty"`
+	VCIDS       []string    `json:"vcids,omitempty"`
+	Name        *string     `json:"name,omitempty"`
+	Type        *string     `json:"type,omitempty"`
+	Created     *Time       `json:"created,omitempty"`
+	Source      *string     `json:"source,omitempty"`
+	Mime        *string     `json:"mime,omitempty"`
+	ImageURL    *string     `json:"image_url,omitempty"`
+	PreviewURL  *string     `json:"preview_url,omitempty"`
+	Title       *string     `json:"title,omitempty"`
+	ChannelID   *string     `json:"channel_id,omitempty"`
+	Summary     *string     `json:"summary,omitempty"`
+	IsPublic    *bool       `json:"is_public,omitempty"`
+	ID          *string     `json:"id,omitempty"`
+	URL         *string     `json:"url,omitempty"`
+	TeamID      *string     `json:"team_id,omitempty"`
+}
+
 type Message struct {
 	Repost          *Repost            `json:"repost,omitempty"`
 	Key             *MessageKey        `json:"key,omitempty"`
@@ -64,6 +90,7 @@ type Message struct {
 	Subtype         *MessageSubtype    `json:"subtype,omitempty"`
 	Text            *string            `json:"text,omitempty"`
 	DisableMarkdown *bool              `json:"disable_markdown,omitempty"`
+	File            *File              `json:"file,omitempty"`
 }
 
 type MessageService service
